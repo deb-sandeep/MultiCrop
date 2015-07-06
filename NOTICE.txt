@@ -1,0 +1,6 @@
+                            NOTICE
+================================================================================
+
+A portion of the code (Rect.java and some parts of DrawingCanvas.java) has been
+used in this application with the explicit permission of Julie Zelenski 
+(zelenski at stanford dot edu).

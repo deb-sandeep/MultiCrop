@@ -1,0 +1,6 @@
+                                LICENSE
+================================================================================
+
+The code of this application is free for copy, modification and re-distribution.  
+However, this code or derivatives of this code can't be used for commercial 
+purposes without explicit approval of the author.
