@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import com.sandy.multicrop.MultiCropApp.Toolbar;
+import com.sandy.multicrop.App.Toolbar;
 
 public class DrawingCanvas extends JPanel {
 	
