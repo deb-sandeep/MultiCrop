@@ -1,4 +1,4 @@
-package com.sandy.multicrop;
+package com.sandy.multicrop.ui;
 
 import java.awt.* ;
 

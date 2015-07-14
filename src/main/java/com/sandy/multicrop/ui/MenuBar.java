@@ -10,15 +10,26 @@ import javax.swing.JMenuBar ;
 import javax.swing.JMenuItem ;
 import javax.swing.KeyStroke ;
 
-public class MenuBar extends JMenuBar {
+import com.sandy.common.bus.Event ;
+import com.sandy.common.bus.EventSubscriber ;
+import com.sandy.multicrop.EventType ;
+import com.sandy.multicrop.MultiCrop ;
+
+public class MenuBar extends JMenuBar implements EventSubscriber {
     
     private static final long serialVersionUID = 9062303552990293475L ;
     
     private MainFrame mainFrame = null ;
     
+    private JMenuItem deleteMI = null ;
+    private JMenuItem quitMI = null ;
+    
     MenuBar( MainFrame frame ) {
         this.mainFrame = frame ;
         setUpUI() ;
+        MultiCrop.BUS.addSubscriberForEventTypes( this, true, 
+                                                 EventType.REGION_DESELECTED, 
+                                                 EventType.REGION_SELECTED );
     }
     
     private void setUpUI() {
@@ -32,11 +43,14 @@ public class MenuBar extends JMenuBar {
         JMenu m = new JMenu( "File" ) ;
         int menuMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() ;
         
-        addMenuItem( m, "Quit", KeyEvent.VK_Q, menuMask, new ActionListener() {
+        quitMI = createMenuItem( "Quit", KeyEvent.VK_Q, menuMask, 
+                                 new ActionListener() {
             public void actionPerformed( ActionEvent e ) {
                 MenuBar.this.mainFrame.windowClosing() ;
             }
         } ) ;
+        
+        m.add( quitMI ) ;
         add( m ) ;
     }
     
@@ -44,21 +58,38 @@ public class MenuBar extends JMenuBar {
         
         JMenu m = new JMenu( "Edit" ) ;
         
-        addMenuItem( m, "Delete", KeyEvent.VK_DELETE, 0, new ActionListener() {
+        deleteMI = createMenuItem( "Delete", KeyEvent.VK_DELETE, 0, 
+                                   new ActionListener() {
             public void actionPerformed( ActionEvent e ) {
                 MenuBar.this.mainFrame.deleteSelectedRegion() ;
             }
         } ) ;
+        deleteMI.setEnabled( false ) ;
+        
+        m.add( deleteMI ) ;
         add( m ) ;
     }
     
-    private void addMenuItem( JMenu menu, String name, 
-                              int keyStroke, int modifier,
-                              ActionListener listener ) {
+    private JMenuItem createMenuItem( String name, 
+                                      int keyStroke, int modifier,
+                                      ActionListener listener ) {
         
         JMenuItem mi = new JMenuItem( name ) ;
         mi.setAccelerator( KeyStroke.getKeyStroke( keyStroke, modifier ) ) ;
         mi.addActionListener( listener ) ;
-        menu.add( mi ) ;
+        return mi ;
+    }
+
+    @Override
+    public void handleEvent( Event event ) {
+        
+        switch( event.getEventType() ) {
+            case EventType.REGION_DESELECTED:
+                deleteMI.setEnabled( false ) ;
+                break ;
+            case EventType.REGION_SELECTED:
+                deleteMI.setEnabled( true ) ;
+                break ;
+        }
     }
 }

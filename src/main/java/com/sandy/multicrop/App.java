@@ -20,6 +20,8 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
+import com.sandy.multicrop.ui.DrawingCanvas ;
+
 public class App {
 
     static public void main(String[] args) {
