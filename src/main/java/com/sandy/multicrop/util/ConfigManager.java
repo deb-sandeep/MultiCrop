@@ -18,63 +18,63 @@ import org.apache.log4j.Logger;
  */
 public class ConfigManager{
 
-	private static Logger log = Logger.getLogger(ConfigManager.class);
-	
-	private boolean showUsage            = false ;
-	
-	public boolean isShowUsage()           { return this.showUsage; }
-	
-	// ------------------------------------------------------------------------
-	private Options clOptions = null ;
-	private boolean logCLP    = false ;
-	
-	public ConfigManager( String[] args ) throws Exception {
-		
-		this.clOptions = prepareOptions() ;
-		parseCLP( args ) ;
-		if( this.showUsage )return ;
-		
-		PropertiesConfiguration propCfg = new PropertiesConfiguration() ;
-		URL cfgURL = ConfigManager.class.getResource( "/config.properties" ) ;
-		if( cfgURL == null ) {
-			throw new Exception( "config.properties not found in classpath." ) ;
-		}
-		propCfg.load( cfgURL );
-		parseConfig( propCfg ) ;
-	}
-	
-	private void parseConfig( PropertiesConfiguration config ) 
-		throws Exception {
-		
-	}
-	
-	protected File getMandatoryDirFromConfig( String key, 
-											PropertiesConfiguration config ) 
-		throws Exception {
-		
-		String path = getMandatoryConfig( key, config ) ;
-		File file = new File( path ) ;
-		if( !file.exists() ) {
-			throw new Exception( "Folder referred to by " + key + 
-					" configuration does not exist." ) ;
-		}
-		return file ;
-	}
-	
-	protected String getMandatoryConfig( String key, PropertiesConfiguration config ) 
-		throws Exception {
-		
-		String value = config.getString( key ) ;
-		if( StringUtil.isEmptyOrNull( value ) ) {
-			throw new Exception( key + " configuration is missing." ) ;
-		}
-		return value ;
-	}
-	
+    private static Logger log = Logger.getLogger(ConfigManager.class);
+    
+    private boolean showUsage            = false ;
+    
+    public boolean isShowUsage()           { return this.showUsage; }
+    
+    // ------------------------------------------------------------------------
+    private Options clOptions = null ;
+    private boolean logCLP    = false ;
+    
+    public ConfigManager( String[] args ) throws Exception {
+        
+        this.clOptions = prepareOptions() ;
+        parseCLP( args ) ;
+        if( this.showUsage )return ;
+        
+        PropertiesConfiguration propCfg = new PropertiesConfiguration() ;
+        URL cfgURL = ConfigManager.class.getResource( "/config.properties" ) ;
+        if( cfgURL == null ) {
+            throw new Exception( "config.properties not found in classpath." ) ;
+        }
+        propCfg.load( cfgURL );
+        parseConfig( propCfg ) ;
+    }
+    
+    private void parseConfig( PropertiesConfiguration config ) 
+        throws Exception {
+        
+    }
+    
+    protected File getMandatoryDirFromConfig( String key, 
+                                            PropertiesConfiguration config ) 
+        throws Exception {
+        
+        String path = getMandatoryConfig( key, config ) ;
+        File file = new File( path ) ;
+        if( !file.exists() ) {
+            throw new Exception( "Folder referred to by " + key + 
+                    " configuration does not exist." ) ;
+        }
+        return file ;
+    }
+    
+    protected String getMandatoryConfig( String key, PropertiesConfiguration config ) 
+        throws Exception {
+        
+        String value = config.getString( key ) ;
+        if( StringUtil.isEmptyOrNull( value ) ) {
+            throw new Exception( key + " configuration is missing." ) ;
+        }
+        return value ;
+    }
+    
     public void printUsage() {
-    	
-    	String usageStr = "MultiCrop [h]";
-    	
+        
+        String usageStr = "MultiCrop [h]";
+        
         HelpFormatter helpFormatter = new HelpFormatter() ;
         helpFormatter.printHelp( 80, usageStr, null, this.clOptions, null ) ;
     }

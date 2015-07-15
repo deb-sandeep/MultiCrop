@@ -20,9 +20,13 @@ public class MenuBar extends JMenuBar implements EventSubscriber {
     private static final long serialVersionUID = 9062303552990293475L ;
     
     private MainFrame mainFrame = null ;
-    
-    private JMenuItem deleteMI = null ;
+
+    // File menus
+    private JMenuItem newMI  = null ;
     private JMenuItem quitMI = null ;
+    
+    // Edit menus
+    private JMenuItem deleteMI = null ;
     
     MenuBar( MainFrame frame ) {
         this.mainFrame = frame ;
@@ -43,13 +47,20 @@ public class MenuBar extends JMenuBar implements EventSubscriber {
         JMenu m = new JMenu( "File" ) ;
         int menuMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() ;
         
-        quitMI = createMenuItem( "Quit", KeyEvent.VK_Q, menuMask, 
+        newMI = createMenuItem( "New", KeyEvent.VK_N, menuMask, 
                                  new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
+                MenuBar.this.mainFrame.createNewDocument() ;
+            }
+        } ) ;
+        quitMI = createMenuItem( "Quit", KeyEvent.VK_Q, menuMask, 
+                new ActionListener() {
             public void actionPerformed( ActionEvent e ) {
                 MenuBar.this.mainFrame.windowClosing() ;
             }
         } ) ;
         
+        m.add( newMI ) ;
         m.add( quitMI ) ;
         add( m ) ;
     }
