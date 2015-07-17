@@ -1,14 +1,18 @@
 package com.sandy.multicrop.ui;
 
 import java.awt.Color ;
-import java.awt.Dimension ;
 import java.awt.Graphics ;
 import java.awt.Point ;
 import java.awt.event.MouseAdapter ;
 import java.awt.event.MouseEvent ;
 import java.awt.event.MouseMotionListener ;
+import java.awt.geom.AffineTransform ;
+import java.awt.image.AffineTransformOp ;
+import java.awt.image.BufferedImage ;
+import java.io.File ;
 import java.util.ArrayList ;
 
+import javax.imageio.ImageIO ;
 import javax.swing.JPanel ;
 
 import com.sandy.multicrop.App.Toolbar ;
@@ -21,13 +25,19 @@ public class DrawingCanvas extends JPanel {
     protected Rect selectedShape ; 
     protected Toolbar toolbar ; 
     
-    public DrawingCanvas(Toolbar tb, int width, int height) {
+    private BufferedImage bufferedImg = null ;
+    private BufferedImage scaledImg   = null ;
+    private float scaleFactor = 1.0f ;
+    
+    public DrawingCanvas( Toolbar tb, File imgFile ) throws Exception {
         
         this.toolbar       = tb ;
         this.allShapes     = new ArrayList<Rect>() ;
         this.selectedShape = null ;
         
-        setPreferredSize( new Dimension(width, height) ) ;
+        this.bufferedImg = ImageIO.read( imgFile ) ;
+        this.scaledImg   = ImageIO.read( imgFile ) ;
+        
         setBackground( Color.white ) ;
         
         CanvasMouseHandler handler = new CanvasMouseHandler() ;
@@ -38,6 +48,7 @@ public class DrawingCanvas extends JPanel {
     public void paintComponent( Graphics g ){
         
         super.paintComponent( g ) ;
+        g.drawImage( this.scaledImg, 0, 0, null ) ;
         for( Rect rect : allShapes ) {
             rect.draw( g, g.getClipBounds() ) ;
         }
@@ -78,6 +89,22 @@ public class DrawingCanvas extends JPanel {
             selectedShape = null ;
             super.repaint() ;
         }
+    }
+    
+    public void scaleImage( float factor ) {
+        
+        this.scaleFactor = factor ;
+        
+        int w = (int)(this.bufferedImg.getWidth()*scaleFactor) ;
+        int h = (int)(this.bufferedImg.getHeight()*scaleFactor) ;
+        
+        scaledImg = new BufferedImage( w, h, BufferedImage.TYPE_INT_ARGB ) ;
+        AffineTransform at = new AffineTransform() ;
+        at.scale( this.scaleFactor, this.scaleFactor ) ;
+        AffineTransformOp scaleOp = new AffineTransformOp( at, AffineTransformOp.TYPE_BICUBIC ) ;
+        scaledImg = scaleOp.filter( this.bufferedImg, scaledImg ) ;
+        
+        super.repaint() ;
     }
     
     // -------------------------------------------------------------------------

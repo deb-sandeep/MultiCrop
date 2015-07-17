@@ -24,11 +24,11 @@ import com.sandy.multicrop.ui.DrawingCanvas ;
 
 public class App {
 
-    static public void main(String[] args) {
+    static public void main(String[] args) throws Exception {
         
         JFrame frame = new JFrame("MultiCrop") ;
         Toolbar toolbar = new Toolbar() ;
-        DrawingCanvas canvas = new DrawingCanvas(toolbar, 350, 350) ;
+        DrawingCanvas canvas = new DrawingCanvas(toolbar, null) ;
         frame.getContentPane().setLayout(new BorderLayout(4, 4)) ;
         frame.getContentPane().add(toolbar, BorderLayout.NORTH) ;
         frame.getContentPane().add(canvas, BorderLayout.CENTER) ;

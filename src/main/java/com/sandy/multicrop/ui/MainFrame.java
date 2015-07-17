@@ -81,9 +81,15 @@ public class MainFrame extends JFrame {
             }
             
             if( imageCropPanel == null ) {
-                imageCropPanel = new ImageCropPanel( file ) ;
-                getContentPane().add( imageCropPanel, BorderLayout.CENTER ) ;
-                revalidate() ;
+                try {
+                    imageCropPanel = new ImageCropPanel( file ) ;
+                    getContentPane().add( imageCropPanel, BorderLayout.CENTER ) ;
+                    revalidate() ;
+                }
+                catch( Exception e ) {
+                    JOptionPane.showMessageDialog( this, e.getMessage() ) ;
+                    logger.error( "Exception loading image.", e ) ;
+                }
             }
         }
     }
